@@ -40,6 +40,12 @@ class PlayerTable extends React.Component<PlayerTableProps> {
     this.loadPlayers();
   }
 
+  componentDidUpdate(prevProps: PlayerTableProps) {
+    if (this.props.divId !== prevProps.divId || this.props.conferenceId !== prevProps.conferenceId) {
+      this.loadPlayers();
+    }
+  }
+
   loadPlayers = () => {
     const {
       divId,
@@ -49,7 +55,7 @@ class PlayerTable extends React.Component<PlayerTableProps> {
       return;
     }
     this.setState({ loading: true });
-    fetch(BACKEND_API + '/divisions/' + divId + '/conference/' + conferenceId)
+    fetch(BACKEND_API + '/seasons/current/divisions/' + divId + '/conference/' + conferenceId)
       .then(data => {
         return data.json();
       }).then(({players, goalies}) => {

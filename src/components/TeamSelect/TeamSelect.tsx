@@ -43,7 +43,7 @@ class TeamSelect extends Component<TeamSelectProps> {
   }
 
   loadDivisions = () => {
-    fetch(BACKEND_API + '/divisions')
+    fetch(BACKEND_API + '/seasons/current/divisions')
       .then(data => {
         return data.json();
       }).then(({divisions}) => {
@@ -53,7 +53,7 @@ class TeamSelect extends Component<TeamSelectProps> {
         if (this.props.onChange) {
           this.props.onChange({
             divId: divisions[0].id,
-            conferenceId: divisions[0].conference_id,
+            conferenceId: divisions[0].conferenceId,
           });
         }
       }).catch(error => {
@@ -63,7 +63,7 @@ class TeamSelect extends Component<TeamSelectProps> {
   }
 
   loadTeamGames = (teamId: string = this.props.teamId || "") => {
-    fetch(BACKEND_API + '/teams/' + teamId)
+    fetch(BACKEND_API + '/seasons/current/teams/' + teamId)
       .then(data => {
         return data.json();
       }).then(teamInfo => {
@@ -84,13 +84,17 @@ class TeamSelect extends Component<TeamSelectProps> {
     if (key === 'teamId') {
       setTimeout(() => this.loadTeamGames('' + event.target.value), 200);
       loadingGames = true;
+      newTeamState.gameId = undefined;
     }
     if (key === 'divId') {
-      let parts = event.target.value.split('#');
-      newTeamState = {
-        divId: parts[0],
-        conferenceId: parts[1],
-      };
+      let id = parseInt(event.target.value);
+      if (this.state.divisions) {
+        let div = this.state.divisions[id];
+        newTeamState = {
+          divId: div.id,
+          conferenceId: div.conferenceId,
+        };
+      }
     } else {
       newTeamState = { ...newTeamState, [key]: event.target.value };
     }
@@ -114,9 +118,9 @@ class TeamSelect extends Component<TeamSelectProps> {
     if (divisions === undefined) {
       return <CircularProgress />
     }
-    const divKey = (div: string, conf: string) => ((div === '') ? '' : `${div}#${conf}`);
-    const divisionItems = divisions && divisions.sort().map((division: Division) =>
-      <MenuItem key={division.name} value={divKey(division.id, division.conference_id)}>{division.name}</MenuItem>
+    let divIndex = divisions.findIndex((d: Division) => d.id === divId && d.conferenceId === conferenceId);
+    const divisionItems = divisions && divisions.sort().map((division: Division, i: number) =>
+      <MenuItem key={division.name} value={i}>{division.name}</MenuItem>
     );
     const selectedDivision = divisions.find(div => div.id === divId);
     const teamItems = selectedDivision && selectedDivision.teams
@@ -131,7 +135,7 @@ class TeamSelect extends Component<TeamSelectProps> {
           <Select
             labelId="division-select-label"
             label="Division"
-            value={divKey(divId, conferenceId)}
+            value={divIndex < 0 ? '' : divIndex.toString()}
             name="divId"
             onChange={this.handleChange}
             children={divisionItems}

@@ -35,6 +35,12 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
     this.loadGameStats();
   }
 
+  componentDidUpdate(prevProps: GameStatsViewProps) {
+    if (this.props.gameId !== prevProps.gameId) {
+      this.loadGameStats();
+    }
+  }
+
   loadGameStats = () => {
     if (!this.props.gameId) {
       return;
@@ -78,7 +84,7 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
       type: 'PENALTY',
       team: team,
       period: penalty.period,
-      time: penalty.off_ice,
+      time: penalty.offIce,
       number: penalty.number,
       description: description
     };
@@ -141,7 +147,7 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
       return <CircularProgress />;
     }
     if (gameStats === undefined) {
-      return null;
+      return <Typography>Select a game above to load stats.</Typography>;
     }
     const gameEvents = this.buildGameEvents(gameStats);
 

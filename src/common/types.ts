@@ -10,19 +10,19 @@ export interface TeamState {
 export interface Team {
     name: string,
     id: string,
-    GP: string,
-    W: string,
-    T: string,
-    L: string,
-    OTL: string,
-    PTS: string,
+    gamesPlayed: string,
+    wins: string,
+    ties: string,
+    losses: string,
+    overtimeLosses: string,
+    points: string,
 }
 
 export interface Division {
-    conference_id: string,
+    conferenceId: string,
     id: string,
     name: string,
-    season_id: string,
+    seasonId: string,
     teams: [Team],
 }
 
@@ -33,8 +33,8 @@ export interface Penalty {
     minutes: string,
     start: string,
     end: string,
-    on_ice: string,
-    off_ice: string,
+    onIce: string,
+    offIce: string,
 }
 
 export interface Shootout {
@@ -94,8 +94,8 @@ export interface Game {
     type: string,
     home: string,
     away: string,
-    home_goals?: number,
-    away_goals?: number,
+    homeGoals?: number,
+    awayGoals?: number,
 }
 
 export interface TeamInfo {
