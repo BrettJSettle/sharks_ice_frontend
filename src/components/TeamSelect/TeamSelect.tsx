@@ -46,7 +46,7 @@ class TeamSelect extends Component<TeamSelectProps> {
     fetch(BACKEND_API + '/divisions')
       .then(data => {
         return data.json();
-      }).then(divisions => {
+      }).then(({divisions}) => {
         this.setState({
           divisions,
         });

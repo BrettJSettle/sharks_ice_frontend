@@ -52,7 +52,7 @@ class PlayerTable extends React.Component<PlayerTableProps> {
     fetch(BACKEND_API + '/divisions/' + divId + '/conference/' + conferenceId)
       .then(data => {
         return data.json();
-      }).then(([players, goalies]) => {
+      }).then(({players, goalies}) => {
         this.setState({
           loading: false,
           players,
