@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 import TeamSelect from '../TeamSelect/TeamSelect';
 import PlayerTable from '../PlayerTable/PlayerTable';
@@ -52,10 +53,15 @@ function App() {
   };
 
   return (
-    <Container maxWidth="md" className="App">
+    <Container maxWidth="lg" className="App">
       <Box pt={2} sx={{ minWidth: 120 }}>
         <Stack spacing={2}>
-          <TeamSelect onChange={setTeamState} {...teamState} />
+          <Typography variant="h3" component="h3" pt={1} color="#FFF">
+            Solar4America Stats Browser
+          </Typography>
+          <Paper>
+            <TeamSelect onChange={setTeamState} {...teamState} />
+          </Paper >
           <Paper>
             <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
               <Tab label="Game Stats" id='simple-tab-0' aria-controls='simple-tabpanel-0' />

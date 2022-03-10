@@ -1,4 +1,4 @@
-export const BACKEND_API = '/sharks_ice/api';
+export const BACKEND_API = 'http://bsettle.com/sharks_ice/api';
 
 export interface TeamState {
     divId?: string,
@@ -106,13 +106,24 @@ export interface TeamInfo {
 export interface Player {
     team: string,
     number: string,
-    position: string,
     name: string,
+    goals: number,
+    assists: number,
+    gamesPlayed: number,
+    hatTricks: number,
+    penaltyMinutes: number,
+    points: number,
+    pointsPerGame: number,
 }
 
 export interface Goalie {
     team: string,
     number: string,
-    position: string,
     name: string,
+    gamesPlayed: number,
+    goalsAgainst: number,
+    goalsAgainstAverage: number,
+    savePercentage: number,
+    shots: number,
+    shutouts: number,
 }

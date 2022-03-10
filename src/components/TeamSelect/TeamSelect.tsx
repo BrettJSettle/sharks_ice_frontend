@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import Grid from '@mui/material/Grid';
-import CircularProgress from '@mui/material/CircularProgress';
 import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
 
-
-import styles from './TeamSelect.module.css';
-
+import { getSeason } from '../../common/util';
 import { BACKEND_API, Team, Division, TeamInfo, TeamState } from '../../common/types';
 
 interface TeamSelectProps {
@@ -43,10 +40,11 @@ class TeamSelect extends Component<TeamSelectProps> {
   }
 
   loadDivisions = () => {
-    fetch(BACKEND_API + '/seasons/current/divisions')
+    let season = getSeason();
+    fetch(BACKEND_API + `/seasons/${season}/divisions`)
       .then(data => {
         return data.json();
-      }).then(({divisions}) => {
+      }).then(({ divisions }) => {
         this.setState({
           divisions,
         });
@@ -63,7 +61,8 @@ class TeamSelect extends Component<TeamSelectProps> {
   }
 
   loadTeamGames = (teamId: string = this.props.teamId || "") => {
-    fetch(BACKEND_API + '/seasons/current/teams/' + teamId)
+    let season = getSeason();
+    fetch(BACKEND_API + `/seasons/${season}/teams/` + teamId)
       .then(data => {
         return data.json();
       }).then(teamInfo => {
@@ -106,7 +105,7 @@ class TeamSelect extends Component<TeamSelectProps> {
     });
   }
 
-  renderTeamSelect = () => {
+  render = () => {
     const {
       divisions,
     } = this.state;
@@ -116,7 +115,12 @@ class TeamSelect extends Component<TeamSelectProps> {
       teamId = ''
     } = this.props;
     if (divisions === undefined) {
-      return <CircularProgress />
+      return <div>
+        <Typography variant="h5" component="h3" pt={1}>
+          Loading Divisions...
+        </Typography>
+        <LinearProgress />
+      </div>
     }
     let divIndex = divisions.findIndex((d: Division) => d.id === divId && d.conferenceId === conferenceId);
     const divisionItems = divisions && divisions.sort().map((division: Division, i: number) =>
@@ -128,7 +132,7 @@ class TeamSelect extends Component<TeamSelectProps> {
       .map((team: Team) =>
         <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
       );
-    return <Grid container spacing={2}>
+    return <Grid container spacing={2} data-testid="TeamSelect" p={2}>
       <Grid item xs={3} sm={2} md={2}>
         <FormControl fullWidth>
           <InputLabel id="division-select-label">Division</InputLabel>
@@ -142,6 +146,7 @@ class TeamSelect extends Component<TeamSelectProps> {
           />
         </FormControl>
       </Grid>
+      {/* TODO: Instead of a single select, display all teams with stats, and let the user select a row in the table */}
       <Grid item xs={9} sm={10} md={10}>
         <FormControl fullWidth>
           <InputLabel id="team-select-label">Team</InputLabel>
@@ -170,7 +175,7 @@ class TeamSelect extends Component<TeamSelectProps> {
       gameId = ''
     } = this.props;
     if (loadingGames) {
-      return <CircularProgress />
+      return <LinearProgress />
     }
     if (teamInfo === undefined) {
       return null;
@@ -200,16 +205,6 @@ class TeamSelect extends Component<TeamSelectProps> {
         />
       </FormControl>
     </div>
-  }
-
-  render() {
-    return (
-      <Paper className={styles.TeamSelect} data-testid="TeamSelect">
-        <Typography variant="h5" component="h3" gutterBottom>
-          Choose your division and team
-        </Typography>
-        {this.renderTeamSelect()}
-      </Paper >);
   }
 }
 
