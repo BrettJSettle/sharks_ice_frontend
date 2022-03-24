@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/sharks_ice/static/css/main.037978fd.css",
+    "main.js": "/sharks_ice/static/js/main.3f60ce80.js",
+    "index.html": "/sharks_ice/index.html",
+    "main.037978fd.css.map": "/sharks_ice/static/css/main.037978fd.css.map",
+    "main.3f60ce80.js.map": "/sharks_ice/static/js/main.3f60ce80.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.037978fd.css",
+    "static/js/main.3f60ce80.js"
+  ]
+}
