@@ -1,9 +1,9 @@
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import ToggleButton from '@mui/material/ToggleButton';
+import Typography from '@mui/material/Typography';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-
 
 import styles from './PlayerTable.module.css';
 import { getSeason } from '../../common/util';
@@ -12,7 +12,7 @@ import { Player, Goalie, BACKEND_API } from '../../common/types';
 interface PlayerTableProps {
   divId?: string,
   conferenceId?: string
-}
+};
 
 interface PlayerTableState {
   loading: boolean,
@@ -82,8 +82,8 @@ class PlayerTable extends React.Component<PlayerTableProps> {
       return <CircularProgress />;
     }
 
-    if (players === undefined) {
-      return null;
+    if (players.length === 0) {
+      return <Typography>Select a team above...</Typography>;
     }
     return <div className={styles.PlayerTable} data-testid="PlayerTable">
       <ToggleButtonGroup

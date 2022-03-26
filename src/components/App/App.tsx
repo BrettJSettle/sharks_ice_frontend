@@ -64,14 +64,14 @@ function App() {
           </Paper >
           <Paper>
             <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Game Stats" id='simple-tab-0' aria-controls='simple-tabpanel-0' />
-              <Tab label="Player Stats" id='simple-tab-1' aria-controls='simple-tabpanel-1' />
+              <Tab label="Player Stats" id='simple-tab-0' aria-controls='simple-tabpanel-0' />
+              <Tab label="Game Stats" id='simple-tab-1' aria-controls='simple-tabpanel-1' />
             </Tabs>
             <TabPanel tab={tab} index={0}>
-              <GameStatsView gameId={teamState.gameId} />
+              <PlayerTable divId={teamState.divId} conferenceId={teamState.conferenceId} />
             </TabPanel>
             <TabPanel tab={tab} index={1}>
-              <PlayerTable divId={teamState.divId} conferenceId={teamState.conferenceId} />
+              <GameStatsView gameId={teamState.gameId} />
             </TabPanel>
           </Paper>
         </Stack>

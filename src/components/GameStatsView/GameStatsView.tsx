@@ -18,12 +18,12 @@ import styles from './GameStatsView.module.css';
 
 interface GameStatsViewProps {
   gameId?: string
-}
+};
 
 interface GameStatsViewState {
   loading: boolean,
   gameStats?: GameStats,
-}
+};
 
 class GameStatsView extends React.Component<GameStatsViewProps> {
   state: GameStatsViewState = {
@@ -138,6 +138,7 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
     });
     return events;
   }
+
   render() {
     const {
       loading,
@@ -147,7 +148,7 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
       return <CircularProgress />;
     }
     if (gameStats === undefined) {
-      return <Typography>Select a game above to load stats.</Typography>;
+      return <Typography>Select a game above to load stats...</Typography>;
     }
     const gameEvents = this.buildGameEvents(gameStats);
 

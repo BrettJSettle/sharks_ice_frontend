@@ -7,24 +7,22 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
+import ListSubheader from '@mui/material/ListSubheader';
 
 import { getSeason } from '../../common/util';
 import { BACKEND_API, Team, Division, TeamInfo, TeamState } from '../../common/types';
 
 interface TeamSelectProps {
   onChange?: React.Dispatch<React.SetStateAction<TeamState>>,
-  divId?: string,
-  conferenceId?: string,
   teamId?: string,
   gameId?: string,
-}
+};
 
 interface TeamSelectState {
   divisions?: [Division],
   teamInfo?: TeamInfo,
   loadingGames: boolean,
-}
-
+};
 
 class TeamSelect extends Component<TeamSelectProps> {
   state: TeamSelectState = {
@@ -34,7 +32,7 @@ class TeamSelect extends Component<TeamSelectProps> {
   };
 
   componentDidMount() {
-    if (this.props.divId === undefined) {
+    if (this.props.teamId === undefined) {
       this.loadDivisions();
     }
   }
@@ -48,12 +46,6 @@ class TeamSelect extends Component<TeamSelectProps> {
         this.setState({
           divisions,
         });
-        if (this.props.onChange) {
-          this.props.onChange({
-            divId: divisions[0].id,
-            conferenceId: divisions[0].conferenceId,
-          });
-        }
       }).catch(error => {
         console.log(error);
         // setTimeout(this.loadDivisions, 3000)
@@ -77,6 +69,9 @@ class TeamSelect extends Component<TeamSelectProps> {
   }
 
   handleChange = (event: SelectChangeEvent<string>) => {
+    let {
+      divisions = []
+    } = this.state;
     let key: string = event.target.name || "";
     let loadingGames = false;
     let newTeamState: TeamState = { ...this.props };
@@ -84,19 +79,17 @@ class TeamSelect extends Component<TeamSelectProps> {
       setTimeout(() => this.loadTeamGames('' + event.target.value), 200);
       loadingGames = true;
       newTeamState.gameId = undefined;
-    }
-    if (key === 'divId') {
-      let id = parseInt(event.target.value);
-      if (this.state.divisions) {
-        let div = this.state.divisions[id];
-        newTeamState = {
-          divId: div.id,
-          conferenceId: div.conferenceId,
-        };
+      let teamDiv = divisions.find((div: Division) => {
+        return div.teams.find((team: Team) => {
+          return team.id === event.target.value;
+        }) === undefined;
+      });
+      if (!!teamDiv) {
+        newTeamState.divId = teamDiv.id;
+        newTeamState.conferenceId = teamDiv.conferenceId;
       }
-    } else {
-      newTeamState = { ...newTeamState, [key]: event.target.value };
     }
+    newTeamState = { ...newTeamState, [key]: event.target.value };
     if (this.props.onChange) {
       this.props.onChange(newTeamState);
     }
@@ -110,44 +103,26 @@ class TeamSelect extends Component<TeamSelectProps> {
       divisions,
     } = this.state;
     const {
-      divId = '',
-      conferenceId = '',
       teamId = ''
     } = this.props;
     if (divisions === undefined) {
       return <div>
         <Typography variant="h5" component="h3" pt={1}>
-          Loading Divisions...
+          Loading Teams...
         </Typography>
         <LinearProgress />
       </div>
     }
-    let divIndex = divisions.findIndex((d: Division) => d.id === divId && d.conferenceId === conferenceId);
-    const divisionItems = divisions && divisions.sort().map((division: Division, i: number) =>
-      <MenuItem key={division.name} value={i}>{division.name}</MenuItem>
-    );
-    const selectedDivision = divisions.find(div => div.id === divId);
-    const teamItems = selectedDivision && selectedDivision.teams
-      .sort((a: Team, b: Team) => (a.name.localeCompare(b.name)))
-      .map((team: Team) =>
-        <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
-      );
+    let teamItems: JSX.Element[] = [];
+    divisions.forEach((div: Division) => {
+      teamItems.push(<ListSubheader key={div.name}>{div.name}</ListSubheader>);
+      div.teams.forEach((team: Team) => {
+        teamItems.push(<MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>);
+      })
+    })
+
     return <Grid container spacing={2} data-testid="TeamSelect" p={2}>
-      <Grid item xs={3} sm={2} md={2}>
-        <FormControl fullWidth>
-          <InputLabel id="division-select-label">Division</InputLabel>
-          <Select
-            labelId="division-select-label"
-            label="Division"
-            value={divIndex < 0 ? '' : divIndex.toString()}
-            name="divId"
-            onChange={this.handleChange}
-            children={divisionItems}
-          />
-        </FormControl>
-      </Grid>
-      {/* TODO: Instead of a single select, display all teams with stats, and let the user select a row in the table */}
-      <Grid item xs={9} sm={10} md={10}>
+      <Grid item xs={12} sm={12} md={12}>
         <FormControl fullWidth>
           <InputLabel id="team-select-label">Team</InputLabel>
           <Select
@@ -177,7 +152,7 @@ class TeamSelect extends Component<TeamSelectProps> {
     if (loadingGames) {
       return <LinearProgress />
     }
-    if (teamInfo === undefined) {
+    if (!!!teamInfo || !!!teamInfo.games) {
       return null;
     }
     const gameItems = teamInfo && teamInfo.games
