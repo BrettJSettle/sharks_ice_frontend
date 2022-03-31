@@ -1,4 +1,5 @@
 export const BACKEND_API = 'http://bsettle.com/sharks_ice/api';
+export const LIKED_TEAMS_KEY = "liked_teams";
 
 export interface TeamState {
     divId?: string,
@@ -16,6 +17,7 @@ export interface Team {
     losses: string,
     overtimeLosses: string,
     points: string,
+    tieBreaker: string,
 }
 
 export interface Division {
@@ -23,7 +25,7 @@ export interface Division {
     id: string,
     name: string,
     seasonId: string,
-    teams: [Team],
+    teams: Team[],
 }
 
 export interface Penalty {
@@ -72,17 +74,17 @@ export interface GameStats {
     referee2: string,
     scorekeeper: string,
     home: string,
-    visitor: string,
+    away: string,
     homeGoals: string,
-    visitorGoals: string,
-    homeScoring: [Goal],
-    homePenalties: [Penalty],
-    homeShootout: [Shootout],
-    homePlayers: [Player],
-    visitorScoring: [Goal],
-    visitorPenalties: [Penalty],
-    visitorShootout: [Shootout],
-    visitorPlayers: [Player],
+    awayGoals: string,
+    homeScoring: Goal[],
+    homePenalties: Penalty[],
+    homeShootout: Shootout[],
+    homePlayers: Player[],
+    awayScoring: Goal[],
+    awayPenalties: Penalty[],
+    awayShootout: Shootout[],
+    awayPlayers: Player[],
 }
 
 export interface Game {
@@ -100,7 +102,7 @@ export interface Game {
 
 export interface TeamInfo {
     calendar?: string,
-    games: [Game],
+    games: Game[],
 }
 
 export interface Player {

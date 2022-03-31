@@ -115,20 +115,20 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
     gameStats.homeScoring.forEach((goal: Goal) => {
       events.push(this._goalGameEvent(goal, gameStats.home));
     });
-    gameStats.visitorScoring.forEach((goal: Goal) => {
-      events.push(this._goalGameEvent(goal, gameStats.visitor));
+    gameStats.awayScoring.forEach((goal: Goal) => {
+      events.push(this._goalGameEvent(goal, gameStats.away));
     });
     gameStats.homePenalties.forEach((penalty: Penalty) => {
       events.push(this._penaltyGameEvent(penalty, gameStats.home));
     });
-    gameStats.visitorPenalties.forEach((penalty: Penalty) => {
-      events.push(this._penaltyGameEvent(penalty, gameStats.visitor));
+    gameStats.awayPenalties.forEach((penalty: Penalty) => {
+      events.push(this._penaltyGameEvent(penalty, gameStats.away));
     });
     gameStats.homeShootout.forEach((shootout: Shootout) => {
       events.push(this._shootoutGameEvent(shootout, gameStats.home));
     });
-    gameStats.visitorShootout.forEach((shootout: Shootout) => {
-      events.push(this._shootoutGameEvent(shootout, gameStats.visitor));
+    gameStats.awayShootout.forEach((shootout: Shootout) => {
+      events.push(this._shootoutGameEvent(shootout, gameStats.away));
     });
     events.sort((a: GameEvent, b: GameEvent) => {
       if (a.period !== b.period) {
@@ -190,7 +190,7 @@ class GameStatsView extends React.Component<GameStatsViewProps> {
     return <div className={styles.GameStatsView} data-testid="GameStatsView">
       <Box>
         <Typography>
-          {`${gameStats.home}-${gameStats.homeGoals} vs. ${gameStats.visitor}-${gameStats.visitorGoals}`}
+          {`${gameStats.home}-${gameStats.homeGoals} vs. ${gameStats.away}-${gameStats.awayGoals}`}
         </Typography>
         <Link href={url}>View Scoresheet</Link>
         <List>

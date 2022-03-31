@@ -34,6 +34,7 @@ class PlayerTable extends React.Component<PlayerTableProps> {
   }
 
   componentDidUpdate(prevProps: PlayerTableProps) {
+    console.log(this.props)
     if (this.props.divId !== prevProps.divId || this.props.conferenceId !== prevProps.conferenceId) {
       this.loadPlayers();
     }
