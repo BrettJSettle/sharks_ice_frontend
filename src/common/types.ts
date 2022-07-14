@@ -1,5 +1,4 @@
-// export const BACKEND_API = 'http://bsettle.com/sharks_ice/api';
-export const BACKEND_API = 'http://localhost:5000';
+export const BACKEND_API = 'http://bsettle.com/sharks_ice/api';
 export const LIKED_TEAMS_KEY = "liked_teams";
 
 export interface TeamState {
