@@ -6,8 +6,6 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-
-import DivisionsView from '../DivisionsView/DivisionsView';
 import GameList from '../GameList/GameList';
 import FooterLinks from '../FooterLinks/FooterLinks';
 
@@ -19,9 +17,6 @@ function App() {
           <Typography variant="h3" component="h3" pt={1} color="#FFF">
             Solar4America Stats Browser
           </Typography>
-          <Paper>
-            <DivisionsView />
-          </Paper >
           <Paper>
             <GameList />
           </Paper>

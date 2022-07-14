@@ -1,0 +1,2 @@
+.TableView tr:nth-child(even) {background: #CCC}
+.TableView tr:nth-child(odd) {background: #FFF}
