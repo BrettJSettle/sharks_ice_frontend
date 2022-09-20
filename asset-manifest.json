@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/sharks_ice/static/css/main.e8d9c64d.css",
-    "main.js": "/sharks_ice/static/js/main.04678829.js",
+    "main.js": "/sharks_ice/static/js/main.17d73050.js",
     "index.html": "/sharks_ice/index.html",
     "main.e8d9c64d.css.map": "/sharks_ice/static/css/main.e8d9c64d.css.map",
-    "main.04678829.js.map": "/sharks_ice/static/js/main.04678829.js.map"
+    "main.17d73050.js.map": "/sharks_ice/static/js/main.17d73050.js.map"
   },
   "entrypoints": [
     "static/css/main.e8d9c64d.css",
-    "static/js/main.04678829.js"
+    "static/js/main.17d73050.js"
   ]
 }
