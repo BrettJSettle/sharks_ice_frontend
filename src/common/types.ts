@@ -1,5 +1,7 @@
 export const BACKEND_API = 'http://bsettle.com/sharks_ice/api';
-export const LIKED_TEAMS_KEY = "liked_teams";
+// Uncomment for local run.
+// export const BACKEND_API = 'http://192.168.86.39:5001';
+
 
 export interface TeamState {
     divId?: string,

@@ -7,6 +7,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 
 import TableView from '../TableView/TableView';
 import { Game, BACKEND_API } from '../../common/types';
@@ -23,38 +25,6 @@ const MenuProps = {
   },
 };
 
-const columns = [
-  {
-    name: 'Level',
-    key: 'level',
-  }, {
-    name: 'Date',
-    key: 'date',
-  }, {
-    name: 'Time',
-    key: 'time',
-  }, {
-    name: 'Rink',
-    key: 'rink',
-  }, {
-    name: 'Home',
-    key: (game: Game) => {
-      if (game.hasOwnProperty("homeGoals")) {
-        return `${game.home} (${game.homeGoals})`;
-      }
-      return game.home;
-    }
-  }, {
-    name: 'Away',
-    key: (game: Game) => {
-      if (game.hasOwnProperty("awayGoals")) {
-        return `${game.away} (${game.awayGoals})`;
-      }
-      return game.away;
-    }
-  },
-];
-
 interface Filters {
   hide_previous_games: boolean,
   levels: string[],
@@ -64,10 +34,11 @@ interface Filters {
 
 interface GameListState {
   games: Game[],
-  filters: Filters
+  filters: Filters,
+  loading: boolean,
 };
 
-class GameList extends React.Component {
+class GameList extends React.Component {  
   state: GameListState = {
     games: [],
     filters: {
@@ -75,8 +46,46 @@ class GameList extends React.Component {
       levels: [],
       teams: [],
       rinks: [],
-    }
+    },
+    loading: true,
   };
+
+  columns = [
+    {
+      name: 'Level',
+      key: 'level',
+    }, {
+      name: 'Date',
+      key: 'date',
+    }, {
+      name: 'Time',
+      key: 'time',
+    }, {
+      name: 'Rink',
+      key: 'rink',
+    }, {
+      name: 'Home',
+      key: (game: Game) => {
+        let text: string = game.home;
+        if (game.hasOwnProperty("homeGoals")) {
+          text += ` (${game.homeGoals})`;
+        }
+        return (<Tooltip title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.home)}>Subscribe to Calendar</Button>}>
+          <p>{text}</p>
+        </Tooltip>);
+      }
+    }, {
+      name: 'Away',
+      key: (game: Game) => {
+        let text: string = game.away;
+        if (game.hasOwnProperty("awayGoals")) {
+          text += ` (${game.awayGoals})`;
+        }
+        return (<Tooltip title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.away)}>Subscribe to Calendar</Button>}>
+          <p>{text}</p>
+        </Tooltip>);      }
+    },
+  ];
 
   componentDidMount = () => {
     this.loadGames();
@@ -89,8 +98,19 @@ class GameList extends React.Component {
       })
       .then(json => {
         let games = json.games.sort(this.gameComparator);
-        this.setState({ games });
+        this.setState({ loading: false, games });
       })
+  }
+
+  showTeamCalendarLink = (team: string)  => {
+    fetch(BACKEND_API + "/seasons/0/teams?team=" + team)
+        .then(res => {
+          return res.json();
+        })
+        .then(json => {
+          const url: string = json.calendar;
+          window.open('https://calendar.google.com/calendar/render?cid=' + url);
+        });
   }
 
   gameComparator = (a: Game, b: Game) => {
@@ -111,6 +131,7 @@ class GameList extends React.Component {
     let {
       games,
       filters,
+      loading,
     } = this.state;
 
     let level_options = games.map(g => g.level).filter((x, i, a) => a.indexOf(x) === i).sort();
@@ -218,7 +239,12 @@ class GameList extends React.Component {
             </Select>
           </FormControl>
         </Box>
-        <TableView columns={columns} rows={filtered_games} />
+        {loading && (
+          <div>
+            <p>Loading...</p>
+            </div>
+        )}
+        <TableView columns={this.columns} rows={filtered_games} />
       </div>
     );
   }
