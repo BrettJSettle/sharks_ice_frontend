@@ -8,8 +8,9 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
 import TableView from '../TableView/TableView';
 import { Game, BACKEND_API } from '../../common/types';
@@ -38,6 +39,18 @@ interface GameListState {
   filters: Filters,
   loading: boolean,
 };
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    border: '1px solid black',
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
 
 class GameList extends React.Component {
   state: GameListState = {
@@ -71,9 +84,11 @@ class GameList extends React.Component {
         if (game.hasOwnProperty("homeGoals")) {
           text += ` (${game.homeGoals})`;
         }
-        return (<Tooltip title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.home)}>Subscribe to Calendar</Button>}>
+        return (<LightTooltip
+          placement="bottom-end" arrow
+          title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.home)}>Subscribe to Calendar</Button>}>
           <Typography variant="button" display="block">{text}</Typography>
-        </Tooltip>);
+        </LightTooltip>);
       }
     }, {
       name: 'Away',
@@ -82,9 +97,11 @@ class GameList extends React.Component {
         if (game.hasOwnProperty("awayGoals")) {
           text += ` (${game.awayGoals})`;
         }
-        return (<Tooltip title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.away)}>Subscribe to Calendar</Button>}>
+        return (<LightTooltip
+          placement="bottom-end" arrow
+          title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.away)}>Subscribe to Calendar</Button>}>
           <Typography variant="button" display="block">{text}</Typography>
-        </Tooltip>);
+        </LightTooltip>);
       }
     },
   ];
