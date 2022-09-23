@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 import TableView from '../TableView/TableView';
 import { Game, BACKEND_API } from '../../common/types';
@@ -38,7 +39,7 @@ interface GameListState {
   loading: boolean,
 };
 
-class GameList extends React.Component {  
+class GameList extends React.Component {
   state: GameListState = {
     games: [],
     filters: {
@@ -71,7 +72,7 @@ class GameList extends React.Component {
           text += ` (${game.homeGoals})`;
         }
         return (<Tooltip title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.home)}>Subscribe to Calendar</Button>}>
-          <p>{text}</p>
+          <Typography variant="button" display="block">{text}</Typography>
         </Tooltip>);
       }
     }, {
@@ -82,8 +83,9 @@ class GameList extends React.Component {
           text += ` (${game.awayGoals})`;
         }
         return (<Tooltip title={<Button variant="text" onClick={() => this.showTeamCalendarLink(game.away)}>Subscribe to Calendar</Button>}>
-          <p>{text}</p>
-        </Tooltip>);      }
+          <Typography variant="button" display="block">{text}</Typography>
+        </Tooltip>);
+      }
     },
   ];
 
@@ -102,15 +104,15 @@ class GameList extends React.Component {
       })
   }
 
-  showTeamCalendarLink = (team: string)  => {
+  showTeamCalendarLink = (team: string) => {
     fetch(BACKEND_API + "/seasons/0/teams?team=" + team)
-        .then(res => {
-          return res.json();
-        })
-        .then(json => {
-          const url: string = json.calendar;
-          window.open('https://calendar.google.com/calendar/render?cid=' + url);
-        });
+      .then(res => {
+        return res.json();
+      })
+      .then(json => {
+        const url: string = json.calendar;
+        window.open('https://calendar.google.com/calendar/render?cid=' + url);
+      });
   }
 
   gameComparator = (a: Game, b: Game) => {
@@ -242,7 +244,7 @@ class GameList extends React.Component {
         {loading && (
           <div>
             <p>Loading...</p>
-            </div>
+          </div>
         )}
         <TableView columns={this.columns} rows={filtered_games} />
       </div>
