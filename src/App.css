@@ -1,0 +1,22 @@
+body {
+  background-color: #89a;
+}
+
+#root {
+  padding: 2rem;
+}
+
+.paper-section {
+  padding: 1rem;
+}
+
+#section-header {
+  padding-bottom: 10px;
+}
+
+#team-list.division_button:nth-child(even) {
+  background-color: #efefef;
+}
+#team-list.division_button:nth-child(odd) {
+  background-color: #fefefe;
+}
